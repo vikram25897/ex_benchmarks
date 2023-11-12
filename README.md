@@ -1,21 +1,11 @@
 # ExBenchmarks
 
-**TODO: Add description**
+## Small collection of benchmarks
 
-## Installation
+### Running locally
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_benchmarks` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:ex_benchmarks, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/ex_benchmarks>.
+* Rust and `cargo` should be installed on system
+* Run `MIX_ENV=prod mix release` to build release
+* Run `_build/prod/rel/ex_benchmarks/bin/ex_benchmarks eval "ExBenchmarks.ReleaseTasks.generate_html()"` to generate html or
+* Run `_build/prod/rel/ex_benchmarks/bin/ex_benchmarks eval "ExBenchmarks.ReleaseTasks.run_server()"` to run HTTP server after running benchmarks. Access results at [localhost:4000](http://localhost:4000)
 

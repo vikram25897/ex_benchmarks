@@ -35,7 +35,7 @@ defmodule ExBenchmarks.Benchmarks.RustNifSort do
 
   @impl true
   def input_generator(index) do
-    input_count = [100_000, 200_000, 500_000, 1_000_000, 2_000_000] |> Enum.at(index)
+    input_count = [10_000, 20_000, 50_000, 100_000, 200_000] |> Enum.at(index)
     input = 1..input_count |> Enum.shuffle()
 
     {input_count, input}

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js" integrity="sha512-6HrPqAvK+lZElIZ4mZ64fyxIBTsaX5zAFZg2V/2WT+iKPrFzTzvx6QAsLW2OaLwobhMYBog/+bvmIEEGXi0p1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <title>
+        </title>
+    </head>
+    <style>
+    canvas {
+        display: block;
+    }
+    </style>
+    <body class="h-screen">
+        <div class="w-full h-screen">
+            <dh-component>
+                <div class="flex h-screen flex-no-wrap">
+                    <div class="w-64 h-screen absolute sm:relative bg-gray-800 shadow md:h-full flex-col justify-between hidden sm:flex">
+                        <div class="px-8 h-100">
+                            <div class="w-full flex items-center">
+                                <h1 class="text-xl font-bold tracking-tight text-gray-300 sm:text-xl">Elixir Benchmarks</h1>
+                            </div>
+                            <div class="h-100 flex flex-col justify-between">
+                                <ul class="mt-12">
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-0" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Enum.member vs Recursion</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-1" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Pattern Matching vs Map.get</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-2" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Reverse Recursion vs Enum.map</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-3" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Rust NIF Sorting</span>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <ul class="mb-12">
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">erlang</span>: <span class="text-sm ml-2 font-bold">26</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">os</span>: <span class="text-sm ml-2 font-bold">Linux</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">elixir</span>: <span class="text-sm ml-2 font-bold">1.15.7</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">available_memory</span>: <span class="text-sm ml-2 font-bold">15.55 GB</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">cpu_speed</span>: <span class="text-sm ml-2 font-bold">AMD Ryzen 7 5800X 8-Core Processor</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">num_cores</span>: <span class="text-sm ml-2 font-bold">16</span>
+                                            </a>
+                                        </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-64 z-40 h-screen absolute bg-gray-800 shadow md:h-full flex-col justify-between sm:hidden transition duration-150 ease-in-out" id="mobile-nav">
+                        <button aria-label="toggle sidebar" id="openSideBar" class="h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 flex items-center shadow rounded-tr rounded-br justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 rounded focus:ring-gray-800" onclick="sidebarHandler(true)">
+                            <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-adjustments" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <circle cx="6" cy="10" r="2" />
+                                <line x1="6" y1="4" x2="6" y2="8" />
+                                <line x1="6" y1="12" x2="6" y2="20" />
+                                <circle cx="12" cy="16" r="2" />
+                                <line x1="12" y1="4" x2="12" y2="14" />
+                                <line x1="12" y1="18" x2="12" y2="20" />
+                                <circle cx="18" cy="7" r="2" />
+                                <line x1="18" y1="4" x2="18" y2="5" />
+                                <line x1="18" y1="9" x2="18" y2="20" />
+                            </svg>
+                        </button>
+                        <button aria-label="Close sidebar" id="closeSideBar" class="hidden h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 flex items-center shadow rounded-tr rounded-br justify-center cursor-pointer text-white" onclick="sidebarHandler(false)">
+                            <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                        <div class="h-screen px-8">
+                            <div class="w-full flex items-center">
+                                <h1 class="text-xl font-bold tracking-tight text-gray-300 sm:text-xl">Elixir Benchmarks</h1>
+                            </div>
+                            <div class="h-100 flex flex-col justify-between">
+                                <ul class="mt-12 h-screen">
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-0" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Enum.member vs Recursion</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-1" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Pattern Matching vs Map.get</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-2" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Reverse Recursion vs Enum.map</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
+                                        <a href="#chart-header-average-3" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2">Rust NIF Sorting</span>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <ul class="mb-12">
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">erlang</span>: <span class="text-sm ml-2 font-bold">26</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">os</span>: <span class="text-sm ml-2 font-bold">Linux</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">elixir</span>: <span class="text-sm ml-2 font-bold">1.15.7</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">available_memory</span>: <span class="text-sm ml-2 font-bold">15.55 GB</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">cpu_speed</span>: <span class="text-sm ml-2 font-bold">AMD Ryzen 7 5800X 8-Core Processor</span>
+                                            </a>
+                                        </li>
+                                    
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2">num_cores</span>: <span class="text-sm ml-2 font-bold">16</span>
+                                            </a>
+                                        </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container mx-auto h-64 md:w-4/5 w-11/12 px-12">
+                        <div class="w-full h-screen overflow-y-scroll">
+                            
+                            <h1 id="chart-header-average-0" class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Enum.member vs Recursion</h1>
+                            <div id="chart-container-average-0" class="h-80vh w-70vw">
+                                <canvas id="chart-average-0"></canvas>
+                                </div>
+                                <div id="chart-container-ips-0" class="h-80vh w-70vw">
+                                <canvas id="chart-ips-0"></canvas>
+                                </div>
+                                <div id="chart-container-median-0" class="h-80vh w-70vw">
+                                <canvas id="chart-median-0"></canvas>
+                                </div>
+                                <div id="chart-container-mode-0" class="h-80vh w-70vw">
+                                <canvas id="chart-mode-0"></canvas>
+                                </div>
+                                <script>
+                                (function() {
+                                    const canvas_average = document.getElementById('chart-average-0');
+                                    const canvas_ips = document.getElementById('chart-ips-0');
+                                    const canvas_median = document.getElementById('chart-median-0');
+                                    const canvas_mode = document.getElementById('chart-mode-0');
+                                    new Chart(canvas_average, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [100000,200000,500000,1000000,2000000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.member",
+                                                    data: [3786.6836256157794,12902.610558354185,23574.27702172081,38848.071945127864,443577.6430033826]
+                                                },
+                                                
+                                                {
+                                                    label: "Recursive member",
+                                                    data: [13874.680290888173,47026.683965852026,77205.26088237803,127385.45661778831,1631795.3354575164]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Average Runtime(in nanoseconds)'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_ips, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [100000,200000,500000,1000000,2000000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.member",
+                                                    data: [264083.32431980845,77503.69551009349,42419.11635629897,25741.303234108513,2254.396757305404]
+                                                },
+                                                
+                                                {
+                                                    label: "Recursive member",
+                                                    data: [72073.73280209731,21264.522940340434,12952.485213714863,7850.189704154645,612.8219503211313]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'IPS'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_median, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [100000,200000,500000,1000000,2000000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.member",
+                                                    data: [3767.0,12865.0,23485.0,38755.0,441719.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Recursive member",
+                                                    data: [13857.0,46990.0,77168.0,127345.0,1632547.0]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Median'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_mode, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [100000,200000,500000,1000000,2000000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.member",
+                                                    data: [3757,12885,23355,38504,441649]
+                                                },
+                                                
+                                                {
+                                                    label: "Recursive member",
+                                                    data: [13937,46920,77218,127515,1633029]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Mode'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    })();
+                                </script>
+
+                            
+                            <h1 id="chart-header-average-1" class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Pattern Matching vs Map.get</h1>
+                            <div id="chart-container-average-1" class="h-80vh w-70vw">
+                                <canvas id="chart-average-1"></canvas>
+                                </div>
+                                <div id="chart-container-ips-1" class="h-80vh w-70vw">
+                                <canvas id="chart-ips-1"></canvas>
+                                </div>
+                                <div id="chart-container-median-1" class="h-80vh w-70vw">
+                                <canvas id="chart-median-1"></canvas>
+                                </div>
+                                <div id="chart-container-mode-1" class="h-80vh w-70vw">
+                                <canvas id="chart-mode-1"></canvas>
+                                </div>
+                                <script>
+                                (function() {
+                                    const canvas_average = document.getElementById('chart-average-1');
+                                    const canvas_ips = document.getElementById('chart-ips-1');
+                                    const canvas_median = document.getElementById('chart-median-1');
+                                    const canvas_mode = document.getElementById('chart-mode-1');
+                                    new Chart(canvas_average, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [1000,2000,5000,10000,20000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Pattern Matching",
+                                                    data: [52761.47244676551,100802.25280887503,325660.2084080754,607688.6988625996,1745429.3641921398]
+                                                },
+                                                
+                                                {
+                                                    label: "Map.get",
+                                                    data: [56916.302187437286,106815.1160940248,336250.7658628587,626971.7809224976,1809133.4163198841]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Average Runtime(in nanoseconds)'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_ips, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [1000,2000,5000,10000,20000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Pattern Matching",
+                                                    data: [18953.22388905968,9920.41320639965,3070.6852546962964,1645.5793926589104,572.9249321199791]
+                                                },
+                                                
+                                                {
+                                                    label: "Map.get",
+                                                    data: [17569.658631489987,9361.97081993285,2973.970921475475,1594.968115676029,552.7508314086571]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'IPS'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_median, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [1000,2000,5000,10000,20000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Pattern Matching",
+                                                    data: [52280.0,98699.0,278073.0,602144.0,1327015.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Map.get",
+                                                    data: [56348.0,105342.0,292180.0,620148.0,1404694.0]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Median'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_mode, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [1000,2000,5000,10000,20000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Pattern Matching",
+                                                    data: [52220,98138,272402,601964,1114723.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Map.get",
+                                                    data: [56368,103368,291739,619207,1251867.3333333333]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Mode'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    })();
+                                </script>
+
+                            
+                            <h1 id="chart-header-average-2" class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Reverse Recursion vs Enum.map</h1>
+                            <div id="chart-container-average-2" class="h-80vh w-70vw">
+                                <canvas id="chart-average-2"></canvas>
+                                </div>
+                                <div id="chart-container-ips-2" class="h-80vh w-70vw">
+                                <canvas id="chart-ips-2"></canvas>
+                                </div>
+                                <div id="chart-container-median-2" class="h-80vh w-70vw">
+                                <canvas id="chart-median-2"></canvas>
+                                </div>
+                                <div id="chart-container-mode-2" class="h-80vh w-70vw">
+                                <canvas id="chart-mode-2"></canvas>
+                                </div>
+                                <script>
+                                (function() {
+                                    const canvas_average = document.getElementById('chart-average-2');
+                                    const canvas_ips = document.getElementById('chart-ips-2');
+                                    const canvas_median = document.getElementById('chart-median-2');
+                                    const canvas_mode = document.getElementById('chart-mode-2');
+                                    new Chart(canvas_average, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Reverse Recursion",
+                                                    data: [79119.50252019335,161178.37113818512,620281.7326296181,1053984.084466941,3477123.4535652176]
+                                                },
+                                                
+                                                {
+                                                    label: "Enum.map",
+                                                    data: [126887.94562048906,283371.5388959841,794171.7797202797,1359943.36185553,2731349.691614313]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Average Runtime(in nanoseconds)'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_ips, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Reverse Recursion",
+                                                    data: [12639.108792990377,6204.306402517601,1612.1706434277967,948.7809301273807,287.5940452947291]
+                                                },
+                                                
+                                                {
+                                                    label: "Enum.map",
+                                                    data: [7880.969268672015,3528.9359118279885,1259.1734251149246,735.3247407565436,366.1193596228862]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'IPS'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_median, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Reverse Recursion",
+                                                    data: [73981.0,198149.0,802345.0,1082792.0,3443443.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Enum.map",
+                                                    data: [126843.0,282791.0,793748.0,1392805.0,2726859.0]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Median'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_mode, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Reverse Recursion",
+                                                    data: [73676.0,121923,304703,604382.0,2504094.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Enum.map",
+                                                    data: [130479.5,280000.5,793792.0,1401442,2729475]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Mode'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    })();
+                                </script>
+
+                            
+                            <h1 id="chart-header-average-3" class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Rust NIF Sorting</h1>
+                            <div id="chart-container-average-3" class="h-80vh w-70vw">
+                                <canvas id="chart-average-3"></canvas>
+                                </div>
+                                <div id="chart-container-ips-3" class="h-80vh w-70vw">
+                                <canvas id="chart-ips-3"></canvas>
+                                </div>
+                                <div id="chart-container-median-3" class="h-80vh w-70vw">
+                                <canvas id="chart-median-3"></canvas>
+                                </div>
+                                <div id="chart-container-mode-3" class="h-80vh w-70vw">
+                                <canvas id="chart-mode-3"></canvas>
+                                </div>
+                                <script>
+                                (function() {
+                                    const canvas_average = document.getElementById('chart-average-3');
+                                    const canvas_ips = document.getElementById('chart-ips-3');
+                                    const canvas_median = document.getElementById('chart-median-3');
+                                    const canvas_mode = document.getElementById('chart-mode-3');
+                                    new Chart(canvas_average, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.sort",
+                                                    data: [616900.4901839733,1455953.3439638852,4445816.483325923,9758042.553170731,22418625.64573991]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust normal sort",
+                                                    data: [280483.8405740122,693376.2699833472,1805091.7535656255,3675498.7613970586,7381819.408856088]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust parallel sort",
+                                                    data: [248123.01424133216,519890.05334651814,1316517.4884088514,2537323.7682741117,4809379.98941799]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust glide sort",
+                                                    data: [276206.624975804,633542.6406517467,1904835.6984187465,3733847.1067961166,7598696.660334347]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Average Runtime(in nanoseconds)'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_ips, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.sort",
+                                                    data: [1621.0069791025421,686.8351957470451,224.93056196775316,102.47956949880945,44.60576735621724]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust normal sort",
+                                                    data: [3565.2677813933697,1442.2183788089792,553.988459603056,272.07191864755237,135.4679577774937]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust parallel sort",
+                                                    data: [4030.2589546464596,1923.4836165128131,759.5797312260578,394.1160416749654,207.92700976015323]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust glide sort",
+                                                    data: [3620.4779667670937,1578.4257220181207,524.9796614112839,267.82028599399854,131.60151598366338]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'IPS'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_median, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.sort",
+                                                    data: [604423.0,1453215.0,4032823.0,8214308.0,21234726.5]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust normal sort",
+                                                    data: [268383.0,669799.0,1748109.0,3580135.0,7136853.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust parallel sort",
+                                                    data: [239678.0,499038.0,1265402.0,2455827.0,4589672.0]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust glide sort",
+                                                    data: [263193.0,608872.0,1842488.0,3630059.0,7331251.0]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Median'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_mode, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [10000,20000,50000,100000,200000],
+                                            datasets: [
+                                                
+                                                {
+                                                    label: "Enum.sort",
+                                                    data: [603562,1450805.0,3927071,8008133.5,18666036]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust normal sort",
+                                                    data: [266699,668376,1733748.0,3694485.3333333335,7256336.125]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust parallel sort",
+                                                    data: [227284,482631.3333333333,1278247.0,2451915,4629857.260869565]
+                                                },
+                                                
+                                                {
+                                                    label: "Rust glide sort",
+                                                    data: [260467,604173,1830695.6666666667,3628592,7315020]
+                                                },
+                                                ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Mode'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    })();
+                                </script>
+
+                            
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var sideBar = document.getElementById("mobile-nav");
+                    var openSidebar = document.getElementById("openSideBar");
+                    var closeSidebar = document.getElementById("closeSideBar");
+                    sideBar.style.transform = "translateX(-260px)";
+
+                    function sidebarHandler(flag) {
+                        if (flag) {
+                            sideBar.style.transform = "translateX(0px)";
+                            openSidebar.classList.add("hidden");
+                            closeSidebar.classList.remove("hidden");
+                        } else {
+                            sideBar.style.transform = "translateX(-260px)";
+                            closeSidebar.classList.add("hidden");
+                            openSidebar.classList.remove("hidden");
+                        }
+                    }
+                </script>
+
+            </dh-component>
+        </div>
+    </body>
+</html>

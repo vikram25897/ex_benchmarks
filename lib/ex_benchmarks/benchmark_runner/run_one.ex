@@ -1,5 +1,7 @@
 defmodule ExBenchmarks.BenchmarkRunner.RunOne do
   @moduledoc false
+  require Logger
+
   alias ExBenchmarks.BenchmarkRunner.{
     BenchmarkConfig,
     BenchmarkFunction,
@@ -9,6 +11,7 @@ defmodule ExBenchmarks.BenchmarkRunner.RunOne do
   @spec run_one(BenchmarkConfig.t()) ::
           BenchmarkResult.t()
   def run_one(%BenchmarkConfig{} = config) do
+    Logger.info("Running #{config.name}")
     benchmark_result = BenchmarkResult.generate_empty_result(config)
     run_iteration(config, config.run_count - 1, benchmark_result)
   end
@@ -19,10 +22,11 @@ defmodule ExBenchmarks.BenchmarkRunner.RunOne do
 
   defp run_iteration(config, index, benchmark_result) do
     {input_size, input} = config.input_generator.(index)
+    Logger.info("Input Size: #{input_size}")
 
     benchmark_result =
       [
-        time: 5,
+        time: 10,
         print: %{
           benchmarking: false,
           configuration: false,

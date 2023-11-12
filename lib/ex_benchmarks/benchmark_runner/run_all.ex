@@ -11,10 +11,10 @@ defmodule ExBenchmarks.BenchmarkRunner.RunAll do
   }
 
   @benchmarks [
-    Benchmarks.EnumMemberVsRecursion
-    # Benchmarks.PatternMatchingVsMapGet,
-    # Benchmarks.ReverseRecursionVsEnumMap,
-    # Benchmarks.RustNifSort
+    Benchmarks.EnumMemberVsRecursion,
+    Benchmarks.PatternMatchingVsMapGet,
+    Benchmarks.ReverseRecursionVsEnumMap,
+    Benchmarks.RustNifSort
   ]
 
   @spec run_benchmarks :: list(BenchmarkResult.t())

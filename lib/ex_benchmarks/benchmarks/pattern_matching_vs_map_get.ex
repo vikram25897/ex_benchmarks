@@ -22,7 +22,7 @@ defmodule ExBenchmarks.Benchmarks.PatternMatchingVsMapGet do
   end
 
   def input_generator(index) do
-    input_count = [100_000, 200_000, 500_000, 1_000_000, 2_000_000] |> Enum.at(index)
+    input_count = [1000, 2000, 5000, 10_000, 20_000] |> Enum.at(index)
 
     input =
       1..input_count
@@ -30,7 +30,7 @@ defmodule ExBenchmarks.Benchmarks.PatternMatchingVsMapGet do
         map =
           1..10
           |> Enum.reduce(%{}, fn _, map ->
-            Map.put(map, Faker.String.base64(), Faker.String.base64())
+            Map.put(map, Faker.Person.name(), Faker.Pokemon.name())
           end)
 
         key_to_find = map |> Map.keys() |> Enum.random()

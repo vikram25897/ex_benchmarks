@@ -24,9 +24,9 @@
                             </div>
                             <div class="h-100 flex flex-col justify-between">
                                 <ul class="mt-12">
-                                    <%= for br <- @result do %>
+                                    <%= for {br, i} <- Enum.with_index(@result) do %>
                                     <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
-                                        <a href="javascript:void(0)" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                        <a href="#chart-header-average-<%= i %>" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
                                             <span class="text-sm ml-2"><%= br.config.name %></span>
                                         </a>
                                     </li>
@@ -72,10 +72,9 @@
                             </div>
                             <div class="h-100 flex flex-col justify-between">
                                 <ul class="mt-12 h-screen">
-                                    <%= for br <- @result do%>
+                                    <%= for {br, i} <- Enum.with_index(@result) do%>
                                     <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
-                                        <a href="javascript:void(0)" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-
+                                        <a href="#chart-header-average-<%= i %>" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
                                             <span class="text-sm ml-2"><%= br.config.name %></span>
                                         </a>
                                     </li>
@@ -96,7 +95,7 @@
                     <div class="container mx-auto h-64 md:w-4/5 w-11/12 px-12">
                         <div class="w-full h-screen overflow-y-scroll">
                             <%= for {br, i} <- Enum.with_index(@result) do %>
-                            <h1 class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl"><%= br.config.name %></h1>
+                            <h1 id="chart-header-average-<%= i %>" class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl"><%= br.config.name %></h1>
                             <div id="chart-container-average-<%= i %>" class="h-80vh w-70vw">
                                 <canvas id="chart-average-<%= i %>"></canvas>
                                 </div>

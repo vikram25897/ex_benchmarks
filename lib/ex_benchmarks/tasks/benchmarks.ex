@@ -9,6 +9,10 @@ defmodule Mix.Tasks.Benchmarks do
 
   @impl Mix.Task
   def run(command_line_args) do
+    Application.ensure_all_started([:briefly, :telemetry])
+    Bandit.Clock.start_link([])
+    Faker.start()
+
     (command_line_args ++ ["mix.exs"])
     |> ElixirServer.Validator.validate()
     |> case do
@@ -21,7 +25,7 @@ defmodule Mix.Tasks.Benchmarks do
     end
   end
 
-  defp generate_html(output) do
+  def generate_html(output) do
     result = RunAll.run_benchmarks()
     system_info = get_system_info()
 
@@ -31,9 +35,7 @@ defmodule Mix.Tasks.Benchmarks do
     File.write!(output, generated_html)
   end
 
-  defp start_webserver(host, port) do
-    Application.ensure_all_started([:briefly, :telemetry])
-    Bandit.Clock.start_link([])
+  def start_webserver(host, port) do
     path = Briefly.create!(extname: ".html")
     generate_html(path)
 
