@@ -1,0 +1,15 @@
+[package]
+name = "sort_interface"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+name = "sort_interface"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.30.0"
+rayon = "1.6.1"
+glidesort = "0.1.0"

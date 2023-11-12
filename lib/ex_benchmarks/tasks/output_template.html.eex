@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="h-100">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js" integrity="sha512-6HrPqAvK+lZElIZ4mZ64fyxIBTsaX5zAFZg2V/2WT+iKPrFzTzvx6QAsLW2OaLwobhMYBog/+bvmIEEGXi0p1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <title>
+        </title>
+    </head>
+    <style>
+    canvas {
+        display: block;
+    }
+    </style>
+    <body class="h-screen">
+        <div class="w-full h-screen">
+            <dh-component>
+                <div class="flex h-screen flex-no-wrap">
+                    <div class="w-64 h-screen absolute sm:relative bg-gray-800 shadow md:h-full flex-col justify-between hidden sm:flex">
+                        <div class="px-8 h-100">
+                            <div class="w-full flex items-center">
+                                <h1 class="text-xl font-bold tracking-tight text-gray-300 sm:text-xl">Elixir Benchmarks</h1>
+                            </div>
+                            <div class="h-100 flex flex-col justify-between">
+                                <ul class="mt-12">
+                                    <%= for br <- @result do %>
+                                    <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                        <a href="javascript:void(0)" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                            <span class="text-sm ml-2"><%= br.config.name %></span>
+                                        </a>
+                                    </li>
+                                    <% end %>
+                                </ul>
+                                <ul class="mb-12">
+                                    <%= for {key, value} <- @system do %>
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2"><%= key %></span>: <span class="text-sm ml-2 font-bold"><%= value %></span>
+                                            </a>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-64 z-40 h-screen absolute bg-gray-800 shadow md:h-full flex-col justify-between sm:hidden transition duration-150 ease-in-out" id="mobile-nav">
+                        <button aria-label="toggle sidebar" id="openSideBar" class="h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 flex items-center shadow rounded-tr rounded-br justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 rounded focus:ring-gray-800" onclick="sidebarHandler(true)">
+                            <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-adjustments" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <circle cx="6" cy="10" r="2" />
+                                <line x1="6" y1="4" x2="6" y2="8" />
+                                <line x1="6" y1="12" x2="6" y2="20" />
+                                <circle cx="12" cy="16" r="2" />
+                                <line x1="12" y1="4" x2="12" y2="14" />
+                                <line x1="12" y1="18" x2="12" y2="20" />
+                                <circle cx="18" cy="7" r="2" />
+                                <line x1="18" y1="4" x2="18" y2="5" />
+                                <line x1="18" y1="9" x2="18" y2="20" />
+                            </svg>
+                        </button>
+                        <button aria-label="Close sidebar" id="closeSideBar" class="hidden h-10 w-10 bg-gray-800 absolute right-0 mt-16 -mr-10 flex items-center shadow rounded-tr rounded-br justify-center cursor-pointer text-white" onclick="sidebarHandler(false)">
+                            <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                        <div class="h-screen px-8">
+                            <div class="w-full flex items-center">
+                                <h1 class="text-xl font-bold tracking-tight text-gray-300 sm:text-xl">Elixir Benchmarks</h1>
+                            </div>
+                            <div class="h-100 flex flex-col justify-between">
+                                <ul class="mt-12 h-screen">
+                                    <%= for br <- @result do%>
+                                    <li class="flex w-full justify-between text-gray-300 hover:text-gray-500 cursor-pointer items-center mb-6">
+                                        <a href="javascript:void(0)" class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+
+                                            <span class="text-sm ml-2"><%= br.config.name %></span>
+                                        </a>
+                                    </li>
+                                    <% end %>
+                                </ul>
+                                <ul class="mb-12">
+                                    <%= for {key, value} <- @system do %>
+                                        <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
+                                            <div class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
+                                                <span class="text-sm ml-2"><%= key %></span>: <span class="text-sm ml-2 font-bold"><%= value %></span>
+                                            </a>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container mx-auto h-64 md:w-4/5 w-11/12 px-12">
+                        <div class="w-full h-screen overflow-y-scroll">
+                            <%= for {br, i} <- Enum.with_index(@result) do %>
+                            <h1 class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl"><%= br.config.name %></h1>
+                            <div id="chart-container-average-<%= i %>" class="h-80vh w-70vw">
+                                <canvas id="chart-average-<%= i %>"></canvas>
+                                </div>
+                                <div id="chart-container-ips-<%= i %>" class="h-80vh w-70vw">
+                                <canvas id="chart-ips-<%= i %>"></canvas>
+                                </div>
+                                <div id="chart-container-median-<%= i %>" class="h-80vh w-70vw">
+                                <canvas id="chart-median-<%= i %>"></canvas>
+                                </div>
+                                <div id="chart-container-mode-<%= i %>" class="h-80vh w-70vw">
+                                <canvas id="chart-mode-<%= i %>"></canvas>
+                                </div>
+                                <script>
+                                (function() {
+                                    const canvas_average = document.getElementById('chart-average-<%= i %>');
+                                    const canvas_ips = document.getElementById('chart-ips-<%= i %>');
+                                    const canvas_median = document.getElementById('chart-median-<%= i %>');
+                                    const canvas_mode = document.getElementById('chart-mode-<%= i %>');
+                                    new Chart(canvas_average, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [<%= br.input_sizes |> Enum.join(",") %>],
+                                            datasets: [
+                                                <%= for {fr, ind} <- Enum.with_index(br.functions_result) do%>
+                                                {
+                                                    label: "<%= Enum.at(br.config.functions, ind).name %>",
+                                                    data: <%= fr.average |> Jason.encode!() %>
+                                                },
+                                                <% end %>]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Average Runtime(in nanoseconds)'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_ips, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [<%= br.input_sizes |> Enum.join(",") %>],
+                                            datasets: [
+                                                <%= for {fr, ind} <- Enum.with_index(br.functions_result) do%>
+                                                {
+                                                    label: "<%= Enum.at(br.config.functions, ind).name %>",
+                                                    data: <%= fr.ips |> Jason.encode!() %>
+                                                },
+                                                <% end %>]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'IPS'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_median, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [<%= br.input_sizes |> Enum.join(",") %>],
+                                            datasets: [
+                                                <%= for {fr, ind} <- Enum.with_index(br.functions_result) do%>
+                                                {
+                                                    label: "<%= Enum.at(br.config.functions, ind).name %>",
+                                                    data: <%= fr.median |> Jason.encode!() %>
+                                                },
+                                                <% end %>]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Median'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    new Chart(canvas_mode, {
+                                        type: 'line', // The type of chart you want to create (bar, line, pie, etc.)
+                                        data: {
+                                            labels: [<%= br.input_sizes |> Enum.join(",") %>],
+                                            datasets: [
+                                                <%= for {fr, ind} <- Enum.with_index(br.functions_result) do%>
+                                                {
+                                                    label: "<%= Enum.at(br.config.functions, ind).name %>",
+                                                    data: <%= fr.mode |> Jason.encode!() %>
+                                                },
+                                                <% end %>]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: false
+                                                }
+                                            },
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Mode'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    })();
+                                </script>
+
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var sideBar = document.getElementById("mobile-nav");
+                    var openSidebar = document.getElementById("openSideBar");
+                    var closeSidebar = document.getElementById("closeSideBar");
+                    sideBar.style.transform = "translateX(-260px)";
+
+                    function sidebarHandler(flag) {
+                        if (flag) {
+                            sideBar.style.transform = "translateX(0px)";
+                            openSidebar.classList.add("hidden");
+                            closeSidebar.classList.remove("hidden");
+                        } else {
+                            sideBar.style.transform = "translateX(-260px)";
+                            closeSidebar.classList.add("hidden");
+                            openSidebar.classList.remove("hidden");
+                        }
+                    }
+                </script>
+
+            </dh-component>
+        </div>
+    </body>
+</html>
