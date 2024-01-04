@@ -1,6 +1,7 @@
 # ExBenchmarks
 
-## Small collection of benchmarks
+## [Small collection of benchmarks](https://vikram25897.github.io/ex_benchmarks/)
+
 
 ### Running locally
 
